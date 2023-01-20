@@ -1,0 +1,51 @@
+﻿@page "/superheroes"
+@inject ISuperHeroService SuperHeroService
+@inject NavigationManager NavigationManager
+
+<PageTitle> Super Heroes</PageTitle>
+
+<h3>Super Heroes</h3>
+
+<table class="table"> <!---Når vi benytter os af "class="table"", så gør den vores tabel flottere, prøv at køre uden og se forskellen-->
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Hero Name</th>
+            <th>Comic</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var hero in SuperHeroService.Heroes)
+        {
+                <tr>
+                    <td>@hero.FirstName</td>
+                    <td>@hero.LastName</td>
+                    <td>@hero.HeroName</td>
+                    <td>@hero.Comic.Name</td>
+                    <td>
+                        <!--Når vi klikker på knappen, hopper den direkte over på vores 'skjulte' Edit side som heddder "Hero"-->
+                        <button class=" btn btn-primary"@onclick="(() => ShowHero(hero.Id))"><i class="oi oi-pencil"></i></button>
+                    </td>
+                </tr>
+
+        }
+    </tbody>
+</table>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SuperHeroService.GetSuperHeroes();
+    }
+
+    void ShowHero (int id)
+    {
+        NavigationManager.NavigateTo($"hero/{id}");
+    }
+
+
+}
+
